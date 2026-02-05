@@ -1,77 +1,65 @@
-import { Link } from "react-router-dom";
-import Layout from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { 
-  Calendar, 
-  Video, 
-  FileText, 
-  Stethoscope, 
-  Heart, 
-  Brain,
-  Bone,
-  Eye,
-  ArrowRight,
-  Check,
-  Clock,
-  CreditCard
-} from "lucide-react";
-
-const mainServices = [
-  {
-    icon: Calendar,
-    title: "In-Person Consultation",
-    description: "Meet face-to-face with our consultants for comprehensive medical assessments, physical examinations, and personalised treatment plans.",
-    price: "From £150",
-    duration: "45-60 minutes",
-    features: [
-      "Full medical history review",
-      "Physical examination",
-      "Personalised treatment plan",
-      "Prescription if required",
-      "Follow-up recommendations",
-    ],
-    href: "/book",
-  },
-  {
-    icon: Video,
-    title: "Video Consultation",
-    description: "Connect with our doctors remotely from the comfort of your home. Ideal for follow-ups, minor concerns, and medication reviews.",
-    price: "£75",
-    duration: "30 minutes",
-    features: [
-      "Secure video platform",
-      "Same expert consultants",
-      "E-prescription service",
-      "Convenient & flexible",
-      "Recording available",
-    ],
-    href: "/book?type=video",
-    popular: true,
-  },
-  {
-    icon: FileText,
-    title: "Document Review",
-    description: "Upload your X-rays, MRI scans, blood tests, or other medical documents for expert analysis and written report.",
-    price: "£50",
-    duration: "24-48 hour response",
-    features: [
-      "Upload any medical document",
-      "Expert specialist review",
-      "Detailed written report",
-      "Recommendations provided",
-      "Follow-up option included",
-    ],
-    href: "/book?type=document",
-  },
-];
-
-const specialties = [
-  { icon: Heart, name: "Cardiology", description: "Heart and cardiovascular care" },
-  { icon: Stethoscope, name: "General Medicine", description: "Comprehensive health assessments" },
-  { icon: Bone, name: "Orthopaedics", description: "Bone, joint and muscle care" },
-  { icon: Brain, name: "Neurology", description: "Brain and nervous system" },
-  { icon: Eye, name: "Dermatology", description: "Skin health and conditions" },
-];
+ import { Link } from "react-router-dom";
+ import Layout from "@/components/layout/Layout";
+ import { Button } from "@/components/ui/button";
+ import { 
+   Phone, 
+   Video, 
+   Heart, 
+   Baby,
+   Bone,
+   Users,
+   Eye,
+   Stethoscope,
+   ArrowRight,
+   Check,
+   Clock,
+   CreditCard
+ } from "lucide-react";
+ import { departments, consultationTypes } from "@/data/clinic-data";
+ 
+ const mainServices = [
+   {
+     icon: Phone,
+     title: "Voice Call Consultation",
+     description: "Connect with our doctors via secure voice call from anywhere. Ideal for quick consultations, follow-ups, and second opinions.",
+     price: "₹500",
+     duration: "20-30 minutes",
+     features: [
+       "Secure voice platform",
+       "Expert specialist advice",
+       "E-prescription service",
+       "Convenient & flexible",
+       "Call recording available",
+     ],
+     href: "/book",
+     popular: false,
+   },
+   {
+     icon: Video,
+     title: "Video Call Consultation",
+     description: "Face-to-face consultation with our doctors via secure video call. Best for detailed assessments and visual examinations.",
+     price: "₹800",
+     duration: "30 minutes",
+     features: [
+       "HD video quality",
+       "Same expert consultants",
+       "Screen sharing for reports",
+       "E-prescription service",
+       "Recording available",
+     ],
+     href: "/book",
+     popular: true,
+   },
+ ];
+ 
+ const departmentIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+   cardiology: Heart,
+   pediatrics: Baby,
+   orthopedics: Bone,
+   gynecology: Users,
+   dermatology: Eye,
+   "general-medicine": Stethoscope,
+ };
 
 const Services = () => {
   return (
@@ -97,7 +85,7 @@ const Services = () => {
       {/* Main Services */}
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-8">
+           <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {mainServices.map((service, index) => (
               <div
                 key={index}
@@ -160,29 +148,33 @@ const Services = () => {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="inline-block px-4 py-2 bg-sky rounded-full text-primary text-sm font-medium mb-4">
-              Medical Specialties
+               Departments
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Expert Care Across Disciplines
+               Our Medical Departments
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Our consultants cover a wide range of medical specialties to address all your healthcare needs.
+               Choose from our specialized departments for expert consultation.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {specialties.map((specialty, index) => (
-              <div
-                key={index}
+           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+             {departments.map((dept) => {
+               const Icon = departmentIcons[dept.id] || Stethoscope;
+               return (
+               <Link
+                 to="/book"
+                 key={dept.id}
                 className="bg-card rounded-xl p-6 text-center shadow-soft hover:shadow-card transition-all duration-300"
               >
                 <div className="w-14 h-14 rounded-lg bg-sky flex items-center justify-center mx-auto mb-4">
-                  <specialty.icon className="w-7 h-7 text-primary" />
+                   <Icon className="w-7 h-7 text-primary" />
                 </div>
-                <h3 className="font-semibold text-foreground mb-2">{specialty.name}</h3>
-                <p className="text-muted-foreground text-sm">{specialty.description}</p>
-              </div>
-            ))}
+                 <h3 className="font-semibold text-foreground mb-1">{dept.name}</h3>
+                 <p className="text-muted-foreground text-xs">{dept.description}</p>
+               </Link>
+             );
+             })}
           </div>
         </div>
       </section>
@@ -201,10 +193,10 @@ const Services = () => {
 
           <div className="grid md:grid-cols-4 gap-8">
             {[
-              { step: 1, title: "Choose Service", desc: "Select the type of consultation that suits your needs" },
-              { step: 2, title: "Pick a Specialist", desc: "Browse our doctors and choose the right expert" },
-              { step: 3, title: "Book & Pay", desc: "Select a convenient time and complete payment" },
-              { step: 4, title: "Get Care", desc: "Attend your appointment and receive expert care" },
+               { step: 1, title: "Select Department", desc: "Choose from Cardiology, Pediatrics, Orthopedics & more" },
+               { step: 2, title: "Pick a Doctor", desc: "Browse specialists and select based on your needs" },
+               { step: 3, title: "Choose Date & Time", desc: "Pick a slot that fits your schedule" },
+               { step: 4, title: "Pay & Consult", desc: "Complete payment and connect with your doctor" },
             ].map((item) => (
               <div key={item.step} className="text-center">
                 <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground font-serif text-2xl font-bold flex items-center justify-center mx-auto mb-4">
@@ -225,7 +217,7 @@ const Services = () => {
             Ready to Get Started?
           </h2>
           <p className="text-white/80 max-w-xl mx-auto mb-8">
-            Book your consultation today and experience the Kaant Clinic difference.
+           Book your consultation today and experience the KANT Healthcare difference.
           </p>
           <Link to="/book">
             <Button variant="hero" size="xl">

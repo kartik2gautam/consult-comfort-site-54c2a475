@@ -1,54 +1,8 @@
-import { Link } from "react-router-dom";
-import Layout from "@/components/layout/Layout";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Award, GraduationCap } from "lucide-react";
-import doctor1 from "@/assets/doctor-1.jpg";
-import doctor2 from "@/assets/doctor-2.jpg";
-import doctor3 from "@/assets/doctor-3.jpg";
-import doctor4 from "@/assets/doctor-4.jpg";
-
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. James Whitmore",
-    specialty: "Consultant Cardiologist",
-    image: doctor1,
-    experience: "25+ years",
-    qualifications: "MBBS, MD, FRCP",
-    bio: "Dr. Whitmore is a leading cardiologist with extensive experience in interventional cardiology and heart failure management. He has treated thousands of patients and is known for his thorough, patient-centred approach.",
-    specialisms: ["Coronary Artery Disease", "Heart Failure", "Arrhythmias", "Preventive Cardiology"],
-  },
-  {
-    id: 2,
-    name: "Dr. Priya Sharma",
-    specialty: "Consultant Physician",
-    image: doctor2,
-    experience: "18+ years",
-    qualifications: "MBBS, MRCP, PhD",
-    bio: "Dr. Sharma specialises in internal medicine with a particular focus on endocrinology and metabolic disorders. Her research contributions have been published in leading medical journals.",
-    specialisms: ["Diabetes Management", "Thyroid Disorders", "General Medicine", "Preventive Health"],
-  },
-  {
-    id: 3,
-    name: "Dr. Michael Okonkwo",
-    specialty: "Consultant Orthopaedic Surgeon",
-    image: doctor3,
-    experience: "15+ years",
-    qualifications: "MBChB, FRCS (Orth)",
-    bio: "Dr. Okonkwo is an expert orthopaedic surgeon specialising in joint replacement and sports injuries. He has performed over 3,000 successful surgeries and is recognised for his minimally invasive techniques.",
-    specialisms: ["Hip & Knee Replacement", "Sports Injuries", "Arthroscopy", "Trauma Surgery"],
-  },
-  {
-    id: 4,
-    name: "Dr. Elizabeth Hayes",
-    specialty: "Consultant Dermatologist",
-    image: doctor4,
-    experience: "12+ years",
-    qualifications: "MBBS, MRCP (Derm)",
-    bio: "Dr. Hayes is a highly skilled dermatologist with expertise in both medical and cosmetic dermatology. She takes a holistic approach to skin health, combining the latest treatments with preventive care.",
-    specialisms: ["Skin Cancer Screening", "Acne & Rosacea", "Eczema & Psoriasis", "Cosmetic Dermatology"],
-  },
-];
+ import { Link } from "react-router-dom";
+ import Layout from "@/components/layout/Layout";
+ import { Button } from "@/components/ui/button";
+ import { ArrowRight, Award, GraduationCap } from "lucide-react";
+ import { doctors, departments } from "@/data/clinic-data";
 
 const Doctors = () => {
   return (
@@ -134,7 +88,7 @@ const Doctors = () => {
 
                   <Link to={`/book?doctor=${doctor.id}`}>
                     <Button variant="gold">
-                      Book with {doctor.name.split(" ")[0]} {doctor.name.split(" ")[1]}
+                       Book Consultation
                       <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>
@@ -152,12 +106,12 @@ const Doctors = () => {
             Not Sure Which Specialist You Need?
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-            Our reception team can help guide you to the right consultant based on your symptoms 
-            and medical needs. Get in touch today.
+             Start by selecting a department and we'll show you the available specialists 
+             for your consultation.
           </p>
-          <Link to="/contact">
-            <Button variant="default" size="xl">
-              Contact Us
+           <Link to="/book">
+             <Button variant="gold" size="xl">
+               Book Appointment
               <ArrowRight className="w-5 h-5" />
             </Button>
           </Link>

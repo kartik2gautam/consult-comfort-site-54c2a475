@@ -13,13 +13,13 @@ const Footer = () => {
                 <span className="font-serif text-xl font-bold text-gold">K</span>
               </div>
               <div>
-                <h3 className="font-serif text-xl font-bold">Kaant Clinic</h3>
-                <p className="text-xs text-white/60 tracking-wider uppercase">Excellence in Healthcare</p>
+               <h3 className="font-serif text-xl font-bold">KANT Healthcare</h3>
+               <p className="text-xs text-white/60 tracking-wider uppercase">Your Health, Our Priority</p>
               </div>
             </div>
             <p className="text-white/70 text-sm leading-relaxed mb-6">
-              Providing exceptional medical care with a personal touch. Our team of distinguished consultants 
-              is committed to your health and wellbeing.
+             Get expert medical consultations from specialist doctors via voice or video call. 
+             Quality healthcare from the comfort of your home.
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-gold transition-colors">
@@ -51,13 +51,14 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h4 className="font-serif text-lg font-semibold mb-6">Our Services</h4>
+           <h4 className="font-serif text-lg font-semibold mb-6">Departments</h4>
             <nav className="flex flex-col gap-3">
-              <span className="text-white/70 text-sm">General Consultation</span>
-              <span className="text-white/70 text-sm">Video Consultation</span>
-              <span className="text-white/70 text-sm">Document Review</span>
-              <span className="text-white/70 text-sm">Specialist Referrals</span>
-              <span className="text-white/70 text-sm">Health Screenings</span>
+             <span className="text-white/70 text-sm">Cardiology</span>
+             <span className="text-white/70 text-sm">Pediatrics</span>
+             <span className="text-white/70 text-sm">Orthopedics</span>
+             <span className="text-white/70 text-sm">Gynecology</span>
+             <span className="text-white/70 text-sm">Dermatology</span>
+             <span className="text-white/70 text-sm">General Medicine</span>
             </nav>
           </div>
 
@@ -68,21 +69,21 @@ const Footer = () => {
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-gold mt-0.5" />
                 <p className="text-white/70 text-sm">
-                  123 Harley Street<br />
-                  London, W1G 6AX<br />
-                  United Kingdom
+                 KANT Healthcare<br />
+                 Mumbai, Maharashtra<br />
+                 India
                 </p>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-gold" />
-                <a href="tel:+441234567890" className="text-white/70 hover:text-gold transition-colors text-sm">
-                  +44 123 456 789
+               <a href="tel:+919876543210" className="text-white/70 hover:text-gold transition-colors text-sm">
+                 +91 98765 43210
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-gold" />
-                <a href="mailto:info@kaantclinic.co.uk" className="text-white/70 hover:text-gold transition-colors text-sm">
-                  info@kaantclinic.co.uk
+               <a href="mailto:info@kanthealthcare.com" className="text-white/70 hover:text-gold transition-colors text-sm">
+                 info@kanthealthcare.com
                 </a>
               </div>
               <div className="flex items-start gap-3">
@@ -103,7 +104,7 @@ const Footer = () => {
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/50 text-sm">
-              © 2024 Kaant Clinic. All rights reserved.
+             © 2024 KANT Healthcare. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a href="#" className="text-white/50 hover:text-gold transition-colors text-sm">Privacy Policy</a>

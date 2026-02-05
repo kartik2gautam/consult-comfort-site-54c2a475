@@ -27,8 +27,8 @@ const Header = () => {
               <span className="text-primary-foreground font-serif text-xl font-bold">K</span>
             </div>
             <div>
-              <h1 className="font-serif text-xl font-bold text-primary">Kaant Clinic</h1>
-              <p className="text-xs text-muted-foreground tracking-wider uppercase">Excellence in Healthcare</p>
+             <h1 className="font-serif text-xl font-bold text-primary">KANT Healthcare</h1>
+             <p className="text-xs text-muted-foreground tracking-wider uppercase">Your Health, Our Priority</p>
             </div>
           </Link>
 
@@ -51,9 +51,9 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-4">
-            <a href="tel:+441onal23456789" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+           <a href="tel:+919876543210" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
               <Phone className="w-4 h-4" />
-              <span>+44 123 456 789</span>
+             <span>+91 98765 43210</span>
             </a>
             <Link to="/book">
               <Button variant="gold" size="default">

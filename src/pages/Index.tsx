@@ -1,79 +1,50 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import Layout from "@/components/layout/Layout";
-import { 
-  Stethoscope, 
-  Video, 
-  FileText, 
-  Calendar, 
-  Award, 
-  Users, 
-  Clock, 
-  Shield,
-  ArrowRight,
-  Star
-} from "lucide-react";
-import heroImage from "@/assets/hero-clinic.jpg";
-import doctor1 from "@/assets/doctor-1.jpg";
-import doctor2 from "@/assets/doctor-2.jpg";
-import doctor3 from "@/assets/doctor-3.jpg";
-import doctor4 from "@/assets/doctor-4.jpg";
-
-const doctors = [
-  {
-    name: "Dr. James Whitmore",
-    specialty: "Consultant Cardiologist",
-    image: doctor1,
-    experience: "25+ years",
-  },
-  {
-    name: "Dr. Priya Sharma",
-    specialty: "Consultant Physician",
-    image: doctor2,
-    experience: "18+ years",
-  },
-  {
-    name: "Dr. Michael Okonkwo",
-    specialty: "Consultant Orthopaedic Surgeon",
-    image: doctor3,
-    experience: "15+ years",
-  },
-  {
-    name: "Dr. Elizabeth Hayes",
-    specialty: "Consultant Dermatologist",
-    image: doctor4,
-    experience: "12+ years",
-  },
-];
-
-const services = [
-  {
-    icon: Calendar,
-    title: "Book Appointment",
-    description: "Schedule an in-person consultation with our distinguished consultants.",
-    href: "/book",
-  },
-  {
-    icon: Video,
-    title: "Video Consultation",
-    description: "Connect with our doctors remotely for expert medical advice.",
-    href: "/book?type=video",
-    price: "£75",
-  },
-  {
-    icon: FileText,
-    title: "Document Review",
-    description: "Upload your X-rays, scans, or reports for expert analysis.",
-    href: "/book?type=document",
-    price: "£50",
-  },
-  {
-    icon: Stethoscope,
-    title: "General Consultation",
-    description: "Comprehensive health assessments and medical consultations.",
-    href: "/book",
-  },
-];
+ import { Link } from "react-router-dom";
+ import { Button } from "@/components/ui/button";
+ import Layout from "@/components/layout/Layout";
+ import { 
+   Phone, 
+   Video, 
+   Heart,
+   Baby,
+   Bone,
+   Users,
+   Award, 
+   Clock, 
+   Shield,
+   ArrowRight,
+   Star
+ } from "lucide-react";
+ import heroImage from "@/assets/hero-clinic.jpg";
+ import { doctors, departments } from "@/data/clinic-data";
+ 
+ const services = [
+   {
+     icon: Phone,
+     title: "Voice Consultation",
+     description: "Connect with our doctors via secure voice call for expert medical advice.",
+     href: "/book",
+     price: "₹500",
+   },
+   {
+     icon: Video,
+     title: "Video Consultation",
+     description: "Face-to-face consultation via secure HD video call.",
+     href: "/book",
+     price: "₹800",
+   },
+   {
+     icon: Heart,
+     title: "Cardiology",
+     description: "Expert heart and cardiovascular care from specialist doctors.",
+     href: "/book",
+   },
+   {
+     icon: Bone,
+     title: "Orthopedics",
+     description: "Bone, joint and muscle care with experienced surgeons.",
+     href: "/book",
+   },
+ ];
 
 const stats = [
   { value: "25+", label: "Years of Excellence" },
@@ -90,7 +61,7 @@ const Index = () => {
         <div className="absolute inset-0">
           <img
             src={heroImage}
-            alt="Kaant Clinic"
+           alt="KANT Healthcare"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/40" />
@@ -99,15 +70,15 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl">
             <span className="inline-block px-4 py-2 bg-gold/20 text-gold rounded-full text-sm font-medium mb-6 animate-fade-in">
-              Welcome to Kaant Clinic
+             Welcome to KANT Healthcare
             </span>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 animate-slide-up">
-              Excellence in 
-              <span className="block text-gold">Private Healthcare</span>
+             Expert Medical 
+             <span className="block text-gold">Second Opinions</span>
             </h1>
             <p className="text-lg text-white/80 leading-relaxed mb-8 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-              Experience exceptional medical care from our team of distinguished consultants. 
-              We provide personalised healthcare services in an environment of comfort and confidentiality.
+             Get expert medical consultations from specialist doctors via voice or video call. 
+             Easy online booking, secure payments, and quality healthcare from the comfort of your home.
             </p>
             <div className="flex flex-wrap gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
               <Link to="/book">
@@ -130,7 +101,12 @@ const Index = () => {
       <section className="py-12 bg-primary">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+           {[
+             { value: "15+", label: "Specialist Doctors" },
+             { value: "10,000+", label: "Consultations" },
+             { value: "6", label: "Departments" },
+             { value: "98%", label: "Patient Satisfaction" },
+           ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="font-serif text-3xl md:text-4xl font-bold text-gold mb-2">
                   {stat.value}
@@ -152,11 +128,11 @@ const Index = () => {
               Our Services
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Comprehensive Healthcare Solutions
+             Book Your Consultation
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              From in-person consultations to remote video appointments, we offer flexible 
-              healthcare options tailored to your needs.
+             Choose voice or video consultation and connect with our specialist doctors 
+             for expert medical advice and second opinions.
             </p>
           </div>
 
@@ -196,12 +172,11 @@ const Index = () => {
                 Why Choose Us
               </span>
               <h2 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-6">
-                Trusted Healthcare Excellence Since 1998
+               Trusted Healthcare at Your Fingertips
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                At Kaant Clinic, we combine traditional British medical excellence with modern 
-                healthcare innovations. Our commitment to patient care, discretion, and clinical 
-                excellence has made us a trusted name in private healthcare.
+               At KANT Healthcare, we bring specialist doctors to you through secure online consultations. 
+               Get expert second opinions, medical advice, and treatment plans without leaving your home.
               </p>
 
               <div className="grid sm:grid-cols-2 gap-6">
@@ -210,8 +185,8 @@ const Index = () => {
                     <Award className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Award Winning</h4>
-                    <p className="text-sm text-muted-foreground">Recognised for excellence in patient care</p>
+                   <h4 className="font-semibold text-foreground mb-1">Expert Specialists</h4>
+                   <p className="text-sm text-muted-foreground">Highly qualified doctors across departments</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -219,8 +194,8 @@ const Index = () => {
                     <Users className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Expert Team</h4>
-                    <p className="text-sm text-muted-foreground">Highly qualified specialists</p>
+                   <h4 className="font-semibold text-foreground mb-1">Easy Booking</h4>
+                   <p className="text-sm text-muted-foreground">Simple online appointment system</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -229,7 +204,7 @@ const Index = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Flexible Hours</h4>
-                    <p className="text-sm text-muted-foreground">Convenient appointment times</p>
+                   <p className="text-sm text-muted-foreground">Book at your convenience</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -237,8 +212,8 @@ const Index = () => {
                     <Shield className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Confidential</h4>
-                    <p className="text-sm text-muted-foreground">Complete privacy assured</p>
+                   <h4 className="font-semibold text-foreground mb-1">Secure Platform</h4>
+                   <p className="text-sm text-muted-foreground">Safe payments & private consultations</p>
                   </div>
                 </div>
               </div>
@@ -252,16 +227,16 @@ const Index = () => {
                   ))}
                 </div>
                 <blockquote className="font-serif text-xl text-foreground italic mb-6">
-                  "The care I received at Kaant Clinic was exceptional. The doctors took time 
+                 "The video consultation was seamless. The doctor took time 
                   to listen and explain everything thoroughly. I felt truly valued as a patient."
                 </blockquote>
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                    <span className="text-primary-foreground font-semibold">JT</span>
+                   <span className="text-primary-foreground font-semibold">RS</span>
                   </div>
                   <div>
-                    <div className="font-semibold text-foreground">James Thompson</div>
-                    <div className="text-sm text-muted-foreground">Patient since 2019</div>
+                   <div className="font-semibold text-foreground">Rajesh Sharma</div>
+                   <div className="text-sm text-muted-foreground">Patient from Mumbai</div>
                   </div>
                 </div>
               </div>
@@ -282,13 +257,13 @@ const Index = () => {
               Meet Our Distinguished Consultants
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Our team of highly qualified specialists brings together decades of experience 
-              across multiple medical disciplines.
+             Our team of experienced specialists across multiple departments 
+             is ready to provide expert medical consultations.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {doctors.map((doctor, index) => (
+           {doctors.slice(0, 4).map((doctor, index) => (
               <div
                 key={index}
                 className="group bg-card rounded-xl overflow-hidden shadow-card hover:shadow-elevated transition-all duration-300"
@@ -333,8 +308,8 @@ const Index = () => {
             Ready to Experience Exceptional Care?
           </h2>
           <p className="text-white/80 max-w-xl mx-auto mb-8">
-            Book your appointment today and take the first step towards better health 
-            with Kaant Clinic's world-class medical team.
+           Book your consultation today and get expert medical advice from 
+           KANT Healthcare's specialist doctors.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link to="/book">
