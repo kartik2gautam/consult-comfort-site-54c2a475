@@ -1,13 +1,45 @@
- import { doctors } from "@/data/clinic-data";
- 
- interface DoctorStepProps {
-   selectedDepartment: string;
-   selectedDoctor: string;
-   onSelect: (doctorId: string) => void;
- }
- 
- const DoctorStep = ({ selectedDepartment, selectedDoctor, onSelect }: DoctorStepProps) => {
-   const filteredDoctors = doctors.filter((d) => d.department === selectedDepartment);
+import { useEffect, useState } from "react";
+import { doctors as localDoctors } from "@/data/clinic-data";
+
+interface Doctor {
+  id: string;
+  name: string;
+  specialty?: string;
+  department?: string;
+  image?: string;
+  experience?: string;
+  qualifications?: string;
+}
+
+interface DoctorStepProps {
+  selectedDepartment: string;
+  selectedDoctor: string;
+  onSelect: (doctorId: string) => void;
+  doctors?: Doctor[];
+}
+
+const DoctorStep = ({ selectedDepartment, selectedDoctor, onSelect, doctors }: DoctorStepProps) => {
+  const [fetchedDoctors, setFetchedDoctors] = useState<Doctor[] | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/api/doctors`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        if (mounted) setFetchedDoctors(data);
+      } catch (err) {
+        // fallback to local data
+        if (mounted) setFetchedDoctors(localDoctors as any);
+      }
+    }
+    if (!doctors) load();
+    return () => { mounted = false; };
+  }, [doctors]);
+
+  const source = doctors || fetchedDoctors || (localDoctors as any);
+  const filteredDoctors = selectedDepartment ? source.filter((d) => d.department === selectedDepartment) : source;
  
    return (
      <div className="space-y-6">

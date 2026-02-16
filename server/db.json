@@ -1,0 +1,41 @@
+{
+  "doctors": [
+    {
+      "id": "1",
+      "name": "Dr. James Whitmore",
+      "specialty": "Consultant Cardiologist",
+      "department": "cardiology",
+      "image": "/assets/doctor-1.jpg",
+      "experience": "25+ years",
+      "qualifications": "MBBS, MD, FRCP"
+    },
+    {
+      "id": "2",
+      "name": "Dr. Priya Sharma",
+      "specialty": "Consultant Physician",
+      "department": "general-medicine",
+      "image": "/assets/doctor-2.jpg",
+      "experience": "18+ years",
+      "qualifications": "MBBS, MRCP, PhD"
+    },
+    {
+      "id": "3",
+      "name": "Dr. Michael Okonkwo",
+      "specialty": "Consultant Orthopaedic Surgeon",
+      "department": "orthopedics",
+      "image": "/assets/doctor-3.jpg",
+      "experience": "15+ years",
+      "qualifications": "MBChB, FRCS (Orth)"
+    },
+    {
+      "id": "4",
+      "name": "Dr. Elizabeth Hayes",
+      "specialty": "Consultant Dermatologist",
+      "department": "dermatology",
+      "image": "/assets/doctor-4.jpg",
+      "experience": "12+ years",
+      "qualifications": "MBBS, MRCP (Derm)"
+    }
+  ],
+  "bookings": []
+}

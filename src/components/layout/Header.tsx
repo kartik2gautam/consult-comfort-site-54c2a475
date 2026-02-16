@@ -55,9 +55,14 @@ const Header = () => {
               <Phone className="w-4 h-4" />
              <span>+91 98765 43210</span>
             </a>
-            <Link to="/book">
-              <Button variant="gold" size="default">
-                Book Appointment
+            <Link to="/consultation">
+              <Button variant="outline" size="default">
+                Consultation
+              </Button>
+            </Link>
+            <Link to="/document-upload">
+              <Button variant="default" size="default" className="bg-gold hover:bg-gold/90 text-white">
+                Second Opinion
               </Button>
             </Link>
           </div>
@@ -90,11 +95,18 @@ const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <Link to="/book" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="gold" className="w-full mt-2">
-                  Book Appointment
-                </Button>
-              </Link>
+              <div className="flex gap-2 mt-4">
+                <Link to="/consultation" className="flex-1" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full">
+                    Consultation
+                  </Button>
+                </Link>
+                <Link to="/document-upload" className="flex-1" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full bg-gold hover:bg-gold/90 text-white">
+                    Second Opinion
+                  </Button>
+                </Link>
+              </div>
             </nav>
           </div>
         )}

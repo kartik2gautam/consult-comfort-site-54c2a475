@@ -1,11 +1,10 @@
- import { useState } from "react";
+import { useState, useEffect } from "react";
  import { useSearchParams } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
  import { ArrowRight, ArrowLeft } from "lucide-react";
- import { generateAppointmentId, doctors, BookingData } from "@/data/clinic-data";
- import DepartmentStep from "@/components/booking/DepartmentStep";
+import { generateAppointmentId, doctors, BookingData } from "@/data/clinic-data";
  import DoctorStep from "@/components/booking/DoctorStep";
  import DateTimeStep from "@/components/booking/DateTimeStep";
  import ConsultationTypeStep from "@/components/booking/ConsultationTypeStep";
@@ -16,13 +15,14 @@ import { useToast } from "@/hooks/use-toast";
 const Book = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  const [availableDoctors, setAvailableDoctors] = useState<typeof doctors | null>(null);
   
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
    
-   // Get initial doctor's department if doctor is preselected
-   const preselectedDoctorId = searchParams.get("doctor") || "";
-   const preselectedDoctor = doctors.find(d => d.id === preselectedDoctorId);
+  // Get initial doctor's department if doctor is preselected
+  const preselectedDoctorId = searchParams.get("doctor") || "";
+  const preselectedDoctor = (availableDoctors || doctors).find(d => d.id === preselectedDoctorId);
    
    const [bookingData, setBookingData] = useState<BookingData>({
      department: preselectedDoctor?.department || "",
@@ -45,60 +45,100 @@ const Book = () => {
      paymentComplete: false,
      appointmentId: "",
    });
+
+  // Load doctors list from backend (used for doctor selection and preselection)
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/api/doctors`);
+        if (!res.ok) throw new Error('Failed to fetch doctors');
+        const data = await res.json();
+        if (mounted) setAvailableDoctors(data);
+        // if search param preselected and bookingData has no department, update
+        if (mounted && preselectedDoctorId && data) {
+          const found = data.find((d: any) => d.id === preselectedDoctorId);
+          if (found) setBookingData((prev) => ({ ...prev, department: found.department, doctorId: preselectedDoctorId }));
+        }
+      } catch (err) {
+        // leave fallback to local data
+      }
+    }
+    load();
+    return () => { mounted = false; };
+  }, []);
  
-   const stepLabels = [
-     "Department",
-     "Doctor",
-     "Date & Time",
-     "Consultation",
-     "Payment",
-     "Patient Info",
-     "Confirmation",
-   ];
+  const stepLabels = [
+    "Doctor",
+    "Date & Time",
+    "Consultation",
+    "Payment",
+    "Patient Info",
+  ];
  
    const handlePaymentComplete = async () => {
      setIsSubmitting(true);
      await new Promise((resolve) => setTimeout(resolve, 2000));
      setBookingData((prev) => ({ ...prev, paymentComplete: true }));
      setIsSubmitting(false);
-     setStep(6);
+    setStep(5);
    };
  
    const handleFinalSubmit = async () => {
-     setIsSubmitting(true);
-     await new Promise((resolve) => setTimeout(resolve, 1500));
-     const appointmentId = generateAppointmentId();
-     setBookingData((prev) => ({ ...prev, appointmentId }));
-     setIsSubmitting(false);
-     setStep(7);
-     toast({
-       title: "Appointment Confirmed",
-       description: `Your appointment ID is ${appointmentId}`,
-     });
+    setIsSubmitting(true);
+    try {
+      // Prepare payload (strip non-serializable fields)
+      const payload = {
+        ...bookingData,
+        date: bookingData.date ? bookingData.date.toString() : null,
+        patientInfo: {
+          ...bookingData.patientInfo,
+          previousPrescriptions: [],
+        },
+      };
+
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL || 'http://localhost:4000'}/api/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || 'Booking failed');
+      const appointmentId = data.appointmentId || generateAppointmentId();
+      setBookingData((prev) => ({ ...prev, appointmentId }));
+      toast({
+        title: 'Appointment Confirmed',
+        description: `Your appointment ID is ${appointmentId}`,
+      });
+      setStep(6);
+    } catch (err: any) {
+      console.error('Booking error', err);
+      toast({ title: 'Booking failed', description: err?.message || 'Please try again' });
+    } finally {
+      setIsSubmitting(false);
+    }
    };
  
    const canProceed = (): boolean => {
      switch (step) {
-       case 1:
-         return !!bookingData.department;
-       case 2:
-         return !!bookingData.doctorId;
-       case 3:
-         return !!bookingData.date && !!bookingData.time;
-       case 4:
-         return !!bookingData.consultationType;
-       case 5:
-         return bookingData.paymentComplete;
-       case 6:
-         const p = bookingData.patientInfo;
-         return !!(p.firstName && p.lastName && p.email && p.phone && p.dateOfBirth && p.gender && p.symptoms);
+      case 1:
+        return !!bookingData.doctorId;
+      case 2:
+        return !!bookingData.date && !!bookingData.time;
+      case 3:
+        return !!bookingData.consultationType;
+      case 4:
+        return bookingData.paymentComplete;
+      case 5:
+        const p = bookingData.patientInfo;
+        return !!(p.firstName && p.lastName && p.email && p.phone && p.dateOfBirth && p.gender && p.symptoms);
        default:
          return true;
     }
   };
  
-   // Confirmation step - show full-page confirmation
-   if (step === 7) {
+  // Confirmation step - show full-page confirmation
+  if (step === 6) {
      return (
        <Layout>
          <section className="py-12 bg-primary">
@@ -139,7 +179,7 @@ const Book = () => {
         <div className="container mx-auto px-4">
            <div className="flex justify-center overflow-x-auto pb-2">
              <div className="flex items-center gap-2 md:gap-4">
-               {[1, 2, 3, 4, 5, 6].map((s) => (
+               {[1, 2, 3, 4, 5].map((s) => (
                 <div key={s} className="flex items-center">
                   <div
                      className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-sm md:text-base font-semibold ${
@@ -150,7 +190,7 @@ const Book = () => {
                   >
                     {s}
                   </div>
-                   {s < 6 && (
+                   {s < 5 && (
                     <div
                        className={`w-6 md:w-12 h-1 mx-1 md:mx-2 ${
                         s < step ? "bg-gold" : "bg-muted"
@@ -173,25 +213,18 @@ const Book = () => {
       <section className="py-12 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-             {/* Step 1: Department Selection */}
+             {/* Step 1: Doctor Selection */}
             {step === 1 && (
-               <DepartmentStep
-                 selectedDepartment={bookingData.department}
-                 onSelect={(dept) => setBookingData((prev) => ({ ...prev, department: dept, doctorId: "" }))}
-               />
-            )}
-
-             {/* Step 2: Doctor Selection */}
-            {step === 2 && (
                <DoctorStep
                  selectedDepartment={bookingData.department}
                  selectedDoctor={bookingData.doctorId}
                  onSelect={(docId) => setBookingData((prev) => ({ ...prev, doctorId: docId }))}
+                 doctors={availableDoctors || undefined}
                />
             )}
 
-             {/* Step 3: Date & Time */}
-            {step === 3 && (
+             {/* Step 2: Date & Time */}
+            {step === 2 && (
                <DateTimeStep
                  selectedDate={bookingData.date}
                  selectedTime={bookingData.time}
@@ -200,16 +233,16 @@ const Book = () => {
                />
             )}
 
-             {/* Step 4: Consultation Type */}
-            {step === 4 && (
+             {/* Step 3: Consultation Type */}
+            {step === 3 && (
                <ConsultationTypeStep
                  selectedType={bookingData.consultationType}
                  onSelect={(type) => setBookingData((prev) => ({ ...prev, consultationType: type }))}
                />
              )}
 
-             {/* Step 5: Payment */}
-             {step === 5 && (
+             {/* Step 4: Payment */}
+             {step === 4 && (
                <PaymentStep
                  bookingData={bookingData}
                  onPaymentComplete={handlePaymentComplete}
@@ -217,8 +250,8 @@ const Book = () => {
                />
              )}
  
-             {/* Step 6: Patient Information */}
-             {step === 6 && (
+             {/* Step 5: Patient Information */}
+             {step === 5 && (
                <PatientInfoStep
                  patientInfo={bookingData.patientInfo}
                  onUpdate={(info) => setBookingData((prev) => ({ ...prev, patientInfo: info }))}
@@ -226,7 +259,7 @@ const Book = () => {
             )}
 
             {/* Navigation Buttons */}
-             {step < 5 && (
+             {step < 4 && (
                <div className="flex justify-between mt-8 pt-8 border-t border-border">
                  {step > 1 && (
                    <Button variant="outline" onClick={() => setStep(step - 1)}>
@@ -247,9 +280,9 @@ const Book = () => {
              )}
  
              {/* Step 6 Submit */}
-             {step === 6 && (
+             {step === 5 && (
                <div className="flex justify-between mt-8 pt-8 border-t border-border">
-                 <Button variant="outline" onClick={() => setStep(5)}>
+                 <Button variant="outline" onClick={() => setStep(4)}>
                    <ArrowLeft className="w-4 h-4" />
                    Back
                  </Button>

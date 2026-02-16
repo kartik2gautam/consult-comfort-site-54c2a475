@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id            String   @id @default(uuid())
+  doctorId      String   @unique
+  name          String
+  specialty     String?
+  department    String?
+  image         String?
+  experience    String?
+  qualifications String?
+  bio           String?
+  specialisms   String[]
+  email         String   @unique
+  password      String   // Hashed password
+  licenseNumber String   @unique
+  phone         String?
+  consultations Consultation[]
+  slots         TimeSlot[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model TimeSlot {
+  id        String   @id @default(uuid())
+  doctorId  String
+  doctor    Doctor   @relation(fields: [doctorId], references: [doctorId], onDelete: Cascade)
+  date      String   // format: YYYY-MM-DD
+  time      String   // format: HH:MM
+  isBooked  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@unique([doctorId, date, time])
+  @@index([doctorId])
+}
+
+model Consultation {
+  id                String   @id @default(uuid())
+  doctorId          String
+  doctor            Doctor   @relation(fields: [doctorId], references: [doctorId], onDelete: Cascade)
+  patientName       String
+  phone             String
+  email             String?
+  symptoms          String?
+  date              String?
+  timeSlot          String?
+  paymentId         String?
+  paymentMethod     String   @default("stripe") // stripe, razorpay
+  paymentStatus     String   @default("pending") // pending, paid, failed
+  status            String   @default("pending") // pending, booked, completed, cancelled
+  amount            Float    @default(500) // in INR
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([doctorId])
+  @@index([paymentStatus])
+}
+
+model SecondOpinion {
+  id                String   @id @default(uuid())
+  name              String
+  phone             String
+  email             String?
+  age               Int?
+  gender            String?
+  remarks           String
+  preferredContact  String   @default("WhatsApp") // WhatsApp, Call, Email
+  documents         String[] // URLs
+  paymentId         String?
+  paymentMethod     String   @default("stripe") // stripe, razorpay
+  paymentStatus     String   @default("pending") // pending, paid, failed
+  status            String   @default("pending") // pending, reviewed, completed
+  amount            Float    @default(800) // in INR
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([paymentStatus])
+}
+
+model Lead {
+  id                String   @id @default(uuid())
+  name              String
+  phone             String
+  email             String?
+  message           String?
+  intent            String?
+  sessionId         String?
+  source            String   @default("chatbot") // chatbot, website, etc
+  contacted         Boolean  @default(false)
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([phone])
+  @@index([source])
+  @@index([contacted])
+  @@index([createdAt])
+}
