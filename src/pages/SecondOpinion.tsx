@@ -247,157 +247,157 @@ const SecondOpinion = () => {
               <div className="max-w-full">
                 {/* Step 1: Personal Information */}
                 {step === 1 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Personal Information</CardTitle>
-                  <CardDescription>Please provide your details</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Full Name *</label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Phone *</label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Email *</label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-semibold mb-2">Age</label>
-                        <input
-                          type="number"
-                          value={formData.age}
-                          onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-semibold mb-2">Gender</label>
-                        <select
-                          value={formData.gender}
-                          onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                        >
-                          <option value="">Select</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Preferred Contact Method</label>
-                      <select
-                        value={formData.preferredContact}
-                        onChange={(e) => setFormData({ ...formData, preferredContact: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      >
-                        <option value="WhatsApp">WhatsApp</option>
-                        <option value="Call">Call</option>
-                        <option value="Email">Email</option>
-                      </select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Step 2: Upload Documents */}
-            {step === 2 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upload Medical Documents</CardTitle>
-                  <CardDescription>Please provide your medical records for review</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Medical Condition Description *</label>
-                      <textarea
-                        value={formData.remarks}
-                        onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                        rows={4}
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold mb-3">Upload Medical Documents *</label>
-                      <div className="border-2 border-dashed border-primary/20 rounded-lg p-8 text-center hover:border-primary/40 transition-colors">
-                        <Upload className="w-10 h-10 mx-auto mb-3 text-primary/60" />
-                        <p className="text-sm font-medium text-foreground mb-1">
-                          Drag and drop or click to upload
-                        </p>
-                        <p className="text-xs text-muted-foreground mb-4">
-                          PDF, JPG, PNG (Max 10MB each)
-                        </p>
-                        <input
-                          type="file"
-                          multiple
-                          onChange={handleFileChange}
-                          accept=".pdf,.jpg,.jpeg,.png"
-                          className="hidden"
-                          id="file-input"
-                        />
-                        <Button
-                          variant="outline"
-                          onClick={() => document.getElementById("file-input")?.click()}
-                        >
-                          Choose Files
-                        </Button>
-                      </div>
-
-                      {files.length > 0 && (
-                        <div className="mt-4 space-y-2">
-                          <p className="text-sm font-semibold text-muted-foreground">
-                            {files.length} file(s) selected
-                          </p>
-                          {files.map((file, idx) => (
-                            <div
-                              key={idx}
-                              className="flex justify-between items-center p-3 bg-muted rounded-lg"
-                            >
-                              <span className="text-sm truncate">{file.name}</span>
-                              <button 
-                                onClick={() => removeFile(idx)}
-                                className="text-red-500 hover:text-red-700"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
-                          ))}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Personal Information</CardTitle>
+                      <CardDescription>Please provide your details</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-semibold mb-2">Full Name *</label>
+                          <input
+                            type="text"
+                            value={formData.name}
+                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+
+                        <div>
+                          <label className="block text-sm font-semibold mb-2">Phone *</label>
+                          <input
+                            type="tel"
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold mb-2">Email *</label>
+                          <input
+                            type="email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          />
+                        </div>
+
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm font-semibold mb-2">Age</label>
+                            <input
+                              type="number"
+                              value={formData.age}
+                              onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+                              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-semibold mb-2">Gender</label>
+                            <select
+                              value={formData.gender}
+                              onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            >
+                              <option value="">Select</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                              <option value="other">Other</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold mb-2">Preferred Contact Method</label>
+                          <select
+                            value={formData.preferredContact}
+                            onChange={(e) => setFormData({ ...formData, preferredContact: e.target.value })}
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                          >
+                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="Call">Call</option>
+                            <option value="Email">Email</option>
+                          </select>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Step 2: Upload Documents */}
+                {step === 2 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Upload Medical Documents</CardTitle>
+                      <CardDescription>Please provide your medical records for review</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-semibold mb-2">Medical Condition Description *</label>
+                          <textarea
+                            value={formData.remarks}
+                            onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                            rows={4}
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold mb-3">Upload Medical Documents *</label>
+                          <div className="border-2 border-dashed border-primary/20 rounded-lg p-8 text-center hover:border-primary/40 transition-colors">
+                            <Upload className="w-10 h-10 mx-auto mb-3 text-primary/60" />
+                            <p className="text-sm font-medium text-foreground mb-1">
+                              Drag and drop or click to upload
+                            </p>
+                            <p className="text-xs text-muted-foreground mb-4">
+                              PDF, JPG, PNG (Max 10MB each)
+                            </p>
+                            <input
+                              type="file"
+                              multiple
+                              onChange={handleFileChange}
+                              accept=".pdf,.jpg,.jpeg,.png"
+                              className="hidden"
+                              id="file-input"
+                            />
+                            <Button
+                              variant="outline"
+                              onClick={() => document.getElementById("file-input")?.click()}
+                            >
+                              Choose Files
+                            </Button>
+                          </div>
+
+                          {files.length > 0 && (
+                            <div className="mt-4 space-y-2">
+                              <p className="text-sm font-semibold text-muted-foreground">
+                                {files.length} file(s) selected
+                              </p>
+                              {files.map((file, idx) => (
+                                <div
+                                  key={idx}
+                                  className="flex justify-between items-center p-3 bg-muted rounded-lg"
+                                >
+                                  <span className="text-sm truncate">{file.name}</span>
+                                  <button 
+                                    onClick={() => removeFile(idx)}
+                                    className="text-red-500 hover:text-red-700"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
 
             {/* Step 3: Review */}
             {step === 3 && (
@@ -522,82 +522,6 @@ const SecondOpinion = () => {
             {step === 6 && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Request Submitted Successfully!</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-center space-y-6">
-                    <CheckCircle2 className="w-16 h-16 mx-auto text-gold" />
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground mb-2">Thank You!</h3>
-                      <p className="text-muted-foreground">
-                        Your second opinion request has been submitted successfully. Our specialists will review your documents and provide their expert opinion within 2-3 business days.
-                      </p>
-                    </div>
-                    <div className="bg-muted rounded-lg p-4 space-y-2 text-sm">
-                      <p>
-                        <span className="font-semibold">Request ID:</span> {secondOpinionId}
-                      </p>
-                      <p>
-                        <span className="font-semibold">Email:</span> {formData.email}
-                      </p>
-                    </div>
-                    <Button
-                      variant="gold"
-                      onClick={() => navigate("/")}
-                      className="w-full"
-                    >
-                      Back to Home
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Old Step 4: Payment */}
-            {step === 999 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Complete Payment</CardTitle>
-                  <CardDescription>Secure payment via Stripe</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    <div className="bg-muted rounded-lg p-4 space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span>Service:</span>
-                        <span className="font-semibold">Second Opinion Review</span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Documents:</span>
-                        <span className="font-semibold">{files.length} file(s)</span>
-                      </div>
-                      <div className="border-t pt-3 flex justify-between">
-                        <span className="font-semibold">Total Amount:</span>
-                        <span className="text-2xl font-bold text-gold">₹{FEE}</span>
-                      </div>
-                    </div>
-
-                    <Button
-                      variant="gold"
-                      onClick={handleStripePayment}
-                      disabled={paymentProcessing}
-                      className="w-full py-6 text-lg"
-                    >
-                      {paymentProcessing ? "Processing..." : `Pay ₹${FEE} with Stripe`}
-                    </Button>
-
-                    <p className="text-xs text-muted-foreground text-center">
-                      Your payment is secure and encrypted. We accept Visa, Mastercard, and American Express.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Step 5: Confirmation */}
-            {step === 5 && (
-              <Card>
-                <CardHeader>
                   <CardTitle className="text-center">Request Submitted Successfully!</CardTitle>
                 </CardHeader>
                 <CardContent className="text-center space-y-6">
@@ -685,7 +609,7 @@ const SecondOpinion = () => {
                 )}
               </div>
             )}
-
+</div>
             {/* ConsentForm Modal */}
             <ConsentForm 
               open={showConsentForm} 
