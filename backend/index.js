@@ -27,6 +27,8 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Routes
 app.use('/api/second-opinion', require('./routes/secondOpinion'));
 app.use('/api/consultation', require('./routes/consultation'));
+app.use('/api/doctors', require('./routes/doctors'));
+app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/document-upload', require('./routes/documentUpload'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/payment', require('./routes/payment'));
