@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -427,6 +427,9 @@ const DocumentUpload = () => {
 
                     <p className="text-xs text-muted-foreground text-center">
                       Your payment is secure and encrypted. We accept Visa, Mastercard, and American Express.
+                    </p>
+                    <p className="text-xs text-muted-foreground text-center">
+                      Refunds are handled per our <Link to="/refund-policy" className="text-primary underline">Refund Policy</Link>.
                     </p>
                   </div>
                 </CardContent>

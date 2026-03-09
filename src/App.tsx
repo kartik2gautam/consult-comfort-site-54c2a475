@@ -13,6 +13,7 @@ import BookNow from "./pages/BookNow";
 import Consultation from "./pages/Consultation";
 import SecondOpinion from "./pages/SecondOpinion";
 import DocumentUpload from "./pages/DocumentUpload";
+import RefundPolicy from "./pages/RefundPolicy";
 import DoctorLogin from "./pages/admin/DoctorLogin";
 import DoctorDashboard from "./pages/admin/DoctorDashboard";
 import NotFound from "./pages/NotFound";
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/consultation" element={<Consultation />} />
           <Route path="/second-opinion" element={<SecondOpinion />} />
           <Route path="/document-upload" element={<DocumentUpload />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/admin/login" element={<DoctorLogin />} />
           <Route path="/doctor-portal" element={<DoctorLogin />} />
           <Route path="/admin/dashboard" element={<DoctorDashboard />} />
