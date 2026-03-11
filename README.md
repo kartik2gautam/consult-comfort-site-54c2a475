@@ -1,6 +1,6 @@
 # Consult Comfort - Healthcare Booking Platform
 
-A modern, full-stack healthcare consultation and second opinion platform built with React, TypeScript, Node.js, PostgreSQL, and Stripe payment integration.
+A modern, full-stack healthcare consultation and second opinion platform built with React, TypeScript, Node.js, PostgreSQL, and Razorpay payment integration.
 
 ## 🚀 Features
 
@@ -8,7 +8,7 @@ A modern, full-stack healthcare consultation and second opinion platform built w
 - **Second Opinion Service**: Submit medical documents for expert review
 - **Document Upload**: Securely upload and store medical documents
 - **Real-time Slot Management**: Dynamic availability with no double-booking
-- **Stripe Payment Integration**: Secure payment processing
+- **Razorpay Payment Integration**: Secure payment processing
 - **WhatsApp Notifications**: Automatic confirmation messages via Twilio
 - **Admin Dashboard**: Manage consultations and second opinions
 - **File Upload Validation**: Secure document submission with type/size checks
@@ -27,7 +27,7 @@ A modern, full-stack healthcare consultation and second opinion platform built w
 - Node.js + Express
 - PostgreSQL (database)
 - Prisma ORM (type-safe queries)
-- Stripe (payments)
+- Razorpay (payments)
 - JWT (authentication)
 - Multer (file uploads)
 - Twilio (WhatsApp API)
@@ -77,7 +77,6 @@ cp .env.example .env
 
 # Edit .env
 VITE_BACKEND_URL=http://localhost:5000
-VITE_STRIPE_PUB_KEY=pk_test_xxxxx  # Get from Stripe dashboard
 ```
 
 **Backend (backend/.env):**
@@ -87,8 +86,8 @@ cp .env.example .env
 
 # Edit .env with:
 DATABASE_URL="postgresql://consult_app:secure_password_123@localhost:5432/consult_comfort"
-STRIPE_SECRET_KEY="sk_test_xxxxx"
-STRIPE_PUBLISHABLE_KEY="pk_test_xxxxx"
+RAZORPAY_KEY_ID="rzp_test_xxxxx"
+RAZORPAY_KEY_SECRET="xxxxx"
 TWILIO_ACCOUNT_SID="ACxxxxx"
 TWILIO_AUTH_TOKEN="xxxxx"
 TWILIO_PHONE_NUMBER="+1234567890"
@@ -169,8 +168,8 @@ POST /api/document-upload               # Upload medical documents
 
 **Payments:**
 ```
-POST /api/payment/stripe/create-intent  # Create Stripe payment
-POST /api/payment/stripe/verify         # Verify Stripe payment
+POST /api/payment/razorpay/order        # Create Razorpay order
+POST /api/payment/razorpay/verify       # Verify Razorpay payment
 ```
 
 **Admin (Protected by JWT):**
@@ -195,14 +194,8 @@ POST /api/doctor/schedule                      # Update doctor's schedule
 
 ## 💳 Payment Testing
 
-### Stripe Test Cards
-| Card Number | Expiry | CVC |
-|-------------|--------|-----|
-| 4242 4242 4242 4242 | 12/25 | 123 |
-| 4000 0000 0000 0002 | 12/25 | 123 |
-
 ### Razorpay Testing
-- Use test keys (doesn't require real card)
+- Use test keys from Razorpay dashboard
 - Any email/phone works
 
 ## 🏥 Doctor Portal Access
@@ -264,11 +257,10 @@ curl http://localhost:5000/api/admin/consultations \
 ✓ Solution: Check VITE_BACKEND_URL in .env and ensure backend is running
 ```
 
-### Stripe payment fails
+### Payment fails
 ```
-✗ Error: Stripe key not configured
-✓ Solution: Add VITE_STRIPE_PUB_KEY to frontend .env
-✓ Solution: Add STRIPE_SECRET_KEY to backend .env
+✗ Error: Razorpay key not configured
+✓ Solution: Add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to backend/.env
 ```
 
 ### Slots not appearing
@@ -304,7 +296,7 @@ For more detailed setup instructions, see [backend/SETUP.md](backend/SETUP.md)
 │   ├── routes/
 │   │   ├── consultation.js        # Consultation API (UPDATED)
 │   │   ├── secondOpinion.js       # Second opinion API (UPDATED)
-│   │   ├── payment.js             # Stripe & Razorpay (UPDATED)
+│   │   ├── payment.js             # Razorpay payments
 │   │   └── admin.js               # Admin endpoints (UPDATED)
 │   ├── index.js                   # Main server (UPDATED)
 │   ├── SETUP.md                   # Detailed setup guide (NEW)

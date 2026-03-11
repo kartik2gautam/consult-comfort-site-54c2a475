@@ -86,9 +86,7 @@ cp .env.example .env
 # Edit .env with your values:
 DATABASE_URL="postgresql://consult_app:secure_password_123@localhost:5432/consult_comfort"
 
-# Payment gateway keys (get from Stripe/Razorpay dashboards)
-STRIPE_SECRET_KEY="sk_test_xxxxx"
-STRIPE_PUBLISHABLE_KEY="pk_test_xxxxx"
+# Payment gateway keys (get from Razorpay dashboard)
 RAZORPAY_KEY_ID="rzp_test_xxxxx"
 RAZORPAY_KEY_SECRET="xxxxx"
 
@@ -148,9 +146,8 @@ bun install
 # Create frontend .env
 cp .env.example .env  # if exists, or create .env
 
-# Add these variables:
+# Add this variable:
 VITE_BACKEND_URL=http://localhost:5000
-VITE_STRIPE_PUB_KEY=pk_test_xxxxx  # Get from Stripe dashboard
 
 # Start dev server
 npm run dev
@@ -226,21 +223,7 @@ npx prisma migrate reset
 # 3. Re-seed with 4 doctors
 ```
 
-## 7. Stripe & Razorpay Setup
-
-### Get Stripe Test Keys
-1. Go to https://dashboard.stripe.com
-2. Sign up or log in
-3. Dashboard → Developers → API Keys
-4. Copy:
-   - Publishable Key (starts with `pk_test_`)
-   - Secret Key (starts with `sk_test_`)
-5. Add to `.env` in backend folder
-
-**Test card for payments:**
-- Card: `4242 4242 4242 4242`
-- Expiry: Any future date (e.g., 12/25)
-- CVC: Any 3 digits
+## 7. Razorpay Setup
 
 ### Get Razorpay Test Keys
 1. Go to https://dashboard.razorpay.com
