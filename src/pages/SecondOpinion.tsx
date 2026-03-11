@@ -695,6 +695,7 @@ const SecondOpinion = () => {
             </div>
           </div>
         </div>
+      </div>
       </section>
     </Layout>
   );
