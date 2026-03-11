@@ -10,15 +10,18 @@ const prisma = new PrismaClient();
 
 /* -------------------- Razorpay Setup -------------------- */
 
-if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+const RAZORPAY_KEY_ID = (process.env.RAZORPAY_KEY_ID || "").replace(/^['"]|['"]$/g, "");
+const RAZORPAY_KEY_SECRET = (process.env.RAZORPAY_KEY_SECRET || "").replace(/^['"]|['"]$/g, "");
+
+if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
   console.error(
     "❌ Razorpay keys missing. Please configure RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env"
   );
 }
 
 const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || "",
-  key_secret: process.env.RAZORPAY_KEY_SECRET || "",
+  key_id: RAZORPAY_KEY_ID,
+  key_secret: RAZORPAY_KEY_SECRET,
 });
 
 /* -------------------- Create Order -------------------- */
