@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -464,9 +464,6 @@ const Consultation = () => {
                         </div>
                         <Button variant="gold" onClick={handleStripePayment} disabled={paymentProcessing} className="w-full py-4 text-lg">{paymentProcessing ? 'Processing...' : `Pay ₹${currentPrice}`}</Button>
                         <p className="text-xs text-muted-foreground text-center">Your payment is secure and encrypted. We accept major cards.</p>
-                        <p className="text-xs text-muted-foreground text-center">
-                          Refunds are handled per our <Link to="/refund-policy" className="text-primary underline">Refund Policy</Link>.
-                        </p>
                       </div>
                     </CardContent>
                   </Card>

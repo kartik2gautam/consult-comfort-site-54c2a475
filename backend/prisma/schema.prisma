@@ -52,7 +52,7 @@ model Consultation {
   date              String?
   timeSlot          String?
   paymentId         String?
-  paymentMethod     String   @default("stripe") // stripe, razorpay
+  paymentMethod     String   @default("razorpay") // razorpay
   paymentStatus     String   @default("pending") // pending, paid, failed
   status            String   @default("pending") // pending, booked, completed, cancelled
   amount            Float    @default(500) // in INR
@@ -74,7 +74,7 @@ model SecondOpinion {
   preferredContact  String   @default("WhatsApp") // WhatsApp, Call, Email
   documents         String[] // URLs
   paymentId         String?
-  paymentMethod     String   @default("stripe") // stripe, razorpay
+  paymentMethod     String   @default("razorpay") // razorpay
   paymentStatus     String   @default("pending") // pending, paid, failed
   status            String   @default("pending") // pending, reviewed, completed
   amount            Float    @default(800) // in INR
