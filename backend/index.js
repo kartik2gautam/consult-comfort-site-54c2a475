@@ -119,20 +119,28 @@ async function seedDoctors() {
   }
 }
 
+let dbConnected = false;
+
 async function start() {
   try {
     await prisma.$executeRaw`SELECT 1`;
+    dbConnected = true;
     console.log('✓ Connected to PostgreSQL');
 
     await seedDoctors();
+  } catch (err) {
+    console.error('⚠ Unable to connect to PostgreSQL:', err.message);
+    console.error('⚠ The backend will still start, but API endpoints requiring the database will fail until a valid DATABASE_URL is configured.');
+  } finally {
+    app.locals.dbConnected = dbConnected;
 
     app.listen(PORT, () => {
       console.log(`✓ Backend running on http://localhost:${PORT}`);
+      if (!dbConnected) {
+        console.log('⚠ WARNING: Database connection not available. Configure DATABASE_URL and restart to enable database-backed features.');
+      }
     });
 
-  } catch (err) {
-    console.error('✗ Startup failed:', err.message);
-    process.exit(1);
   }
 }
 

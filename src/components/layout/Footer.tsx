@@ -86,6 +86,7 @@ const Footer = () => {
              © 2024 KANT Healthcare. All rights reserved.
             </p>
             <div className="flex gap-6">
+              <Link to="/refund-policy" className="text-white/50 hover:text-gold transition-colors text-sm">Refund Policy</Link>
               <a href="#" className="text-white/50 hover:text-gold transition-colors text-sm">Privacy Policy</a>
               <a href="#" className="text-white/50 hover:text-gold transition-colors text-sm">Terms of Service</a>
               <a href="#" className="text-white/50 hover:text-gold transition-colors text-sm">Cookie Policy</a>
