@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -9,12 +9,14 @@ import ConsentForm from "@/components/ConsentForm";
 import { Badge } from "@/components/ui/badge";
 import { doctors as clinicDoctors } from "@/data/clinic-data";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 declare global {
   interface Window {
-    Razorpay: any;
+    Stripe: any;
   }
 }
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const STRIPE_PUB_KEY = import.meta.env.VITE_STRIPE_PUB_KEY || "";
 
 interface ConsultationType {
   type: "voice" | "video";
@@ -163,12 +165,12 @@ const Consultation = () => {
     }
   };
 
-  const handleRazorpayPayment = async () => {
+  const handleStripePayment = async () => {
     try {
       setPaymentProcessing(true);
 
-      // Create Razorpay order
-      const orderRes = await fetch(`${BACKEND_URL}/api/payment/razorpay/order`, {
+      // Create payment intent
+      const intentRes = await fetch(`${BACKEND_URL}/api/payment/stripe/create-intent`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -178,61 +180,77 @@ const Consultation = () => {
         })
       });
 
-      const orderData = await orderRes.json();
-      if (!orderRes.ok) throw new Error(orderData.message || "Failed to create payment order");
+      const intentData = await intentRes.json();
+      if (!intentRes.ok) throw new Error(intentData.message);
 
-      const { orderId, amount, currency, keyId } = orderData;
+      const { clientSecret } = intentData;
 
-      // Load Razorpay checkout
+      // Load Stripe.js
       const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.src = "https://js.stripe.com/v3/";
       script.async = true;
       script.onload = async () => {
-        const options = {
-          key: keyId,
-          amount,
-          currency,
-          name: "Consult Comfort",
-          description: "Consultation Payment",
-          order_id: orderId,
-          prefill: {
-            name: formData.patientName,
-            email: formData.email,
-            contact: formData.phone,
-          },
-          theme: {
-            color: "#0f766e",
-          },
-          handler: async (response: any) => {
-            const verifyRes = await fetch(`${BACKEND_URL}/api/payment/razorpay/verify`, {
+        const stripe = window.Stripe(STRIPE_PUB_KEY);
+        const elements = stripe.elements();
+        const cardElement = elements.create("card");
+
+        // Create modal for card input
+        const modal = document.createElement("div");
+        modal.style.cssText =
+          "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999";
+        modal.innerHTML = `
+          <div style="background:white;padding:40px;border-radius:8px;max-width:400px;width:100%;">
+            <h2 style="margin:0 0 20px 0;font-size:24px;">Enter Card Details</h2>
+            <div id="card-element" style="border:1px solid #ccc;padding:10px;border-radius:4px;margin-bottom:20px;"></div>
+            <div id="card-errors" style="color:red;margin-bottom:10px;"></div>
+            <button id="pay-btn" style="width:100%;padding:10px;background:#007bff;color:white;border:none;border-radius:4px;cursor:pointer;">Pay ₹${currentPrice}</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+
+        cardElement.mount("#card-element");
+
+        const payBtn = modal.querySelector("#pay-btn") as HTMLButtonElement;
+        const cardErrors = modal.querySelector("#card-errors") as HTMLDivElement;
+
+        payBtn.onclick = async () => {
+          payBtn.disabled = true;
+          payBtn.textContent = "Processing...";
+
+          const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: { card: cardElement }
+          });
+
+          if (error) {
+            cardErrors.textContent = error.message;
+            payBtn.disabled = false;
+            payBtn.textContent = `Pay ₹${currentPrice}`;
+          } else if (paymentIntent.status === "succeeded") {
+            // Verify with backend
+            const verifyRes = await fetch(`${BACKEND_URL}/api/payment/stripe/verify`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                orderId: response.razorpay_order_id,
-                paymentId: response.razorpay_payment_id,
-                signature: response.razorpay_signature,
+                paymentIntentId: paymentIntent.id,
                 type: "consultation",
-                refId: consultationId,
-              }),
+                refId: consultationId
+              })
             });
 
             if (verifyRes.ok) {
+              modal.remove();
               setStep(6);
               toast({
                 title: "Success",
-                description: "Consultation booked successfully!",
+                description: "Consultation booked successfully!"
               });
             } else {
-              toast({
-                title: "Error",
-                description: "Payment verification failed. Please contact support.",
-              });
+              cardErrors.textContent = "Verification failed";
+              payBtn.disabled = false;
+              payBtn.textContent = `Pay ₹${currentPrice}`;
             }
-          },
+          }
         };
-
-        const razorpay = new window.Razorpay(options);
-        razorpay.open();
       };
       document.head.appendChild(script);
     } catch (err: any) {
@@ -434,7 +452,7 @@ const Consultation = () => {
                   <Card>
                     <CardHeader>
                       <CardTitle>Complete Payment</CardTitle>
-                      <CardDescription>Secure payment via Razorpay</CardDescription>
+                      <CardDescription>Secure payment via Stripe</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-6">
@@ -444,11 +462,8 @@ const Consultation = () => {
                           <div className="flex justify-between text-sm"><span>Date & Time:</span><span className="font-semibold">{selectedDate} at {selectedSlot}</span></div>
                           <div className="border-t pt-3 flex justify-between"><span className="font-semibold">Total Amount:</span><span className="text-2xl font-bold text-gold">₹{currentPrice}</span></div>
                         </div>
-                        <Button variant="gold" onClick={handleRazorpayPayment} disabled={paymentProcessing} className="w-full py-4 text-lg">{paymentProcessing ? 'Processing...' : `Pay ₹${currentPrice}`}</Button>
+                        <Button variant="gold" onClick={handleStripePayment} disabled={paymentProcessing} className="w-full py-4 text-lg">{paymentProcessing ? 'Processing...' : `Pay ₹${currentPrice}`}</Button>
                         <p className="text-xs text-muted-foreground text-center">Your payment is secure and encrypted. We accept major cards.</p>
-                        <p className="text-xs text-muted-foreground text-center">
-                          Refunds are handled per our <Link to="/refund-policy" className="text-primary underline">Refund Policy</Link>.
-                        </p>
                       </div>
                     </CardContent>
                   </Card>
