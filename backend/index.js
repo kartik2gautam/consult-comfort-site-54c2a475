@@ -12,13 +12,13 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-app.use(cors({ 
+app.use(cors({
   origin: [
     'http://localhost:8080',
     'http://localhost:5173',
     process.env.FRONTEND_URL || 'http://localhost:8080'
-  ], 
-  credentials: true 
+  ],
+  credentials: true
 }));
 
 // Static uploads
@@ -41,10 +41,10 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 async function seedDoctors() {
   try {
     const count = await prisma.doctor.count();
-    if (count === 0) {
+
+    if (count < 3) {
       const hashedPassword = await bcrypt.hash('doctor123', 10);
-      // Seed with the same core doctors that are shown on the marketing site
-      // (see src/data/clinic-data.ts) so the experience is consistent everywhere.
+
       const doctors = [
         {
           doctorId: 'DR-BHARAT',
@@ -71,12 +71,49 @@ async function seedDoctors() {
           password: hashedPassword,
           licenseNumber: 'LIC-KANT-0002',
           phone: '+91-9999990002'
+        },
+        {
+          doctorId: 'DR-ULHAS',
+          name: 'Dr. Ulhas',
+          specialty: 'Orthopedic Specialist',
+          department: 'orthopedics',
+          experience: '12+ years',
+          qualifications: 'MBBS, MS Orthopedics',
+          bio: 'Experienced orthopedic doctor specialising in bone and joint treatments, fracture management, and sports injuries.',
+          email: 'dr.ulhas@kanthealth.com',
+          password: hashedPassword,
+          licenseNumber: 'LIC-KANT-0003',
+          phone: '+91-9999990003'
         }
       ];
-      await prisma.doctor.createMany({ data: doctors });
+
+      await prisma.doctor.createMany({
+        data: doctors,
+        skipDuplicates: true
+      });
+
+      await prisma.doctor.create({
+        data: {
+          doctorId: "DR-ULHAS",
+          name: "Dr. Ulhas",
+          specialty: "Orthopedic Specialist",
+          department: "orthopedics",
+          experience: "12+ years",
+          qualifications: "MBBS, MS Orthopedics",
+          bio: "Experienced orthopedic specialist focusing on joint replacement and sports injuries.",
+          email: "dr.ulhas@kanthealth.com",
+          password: await bcrypt.hash("doctor123", 10),
+          licenseNumber: "LIC-KANT-0003",
+          phone: "+91-9999990003"
+        }
+      });
       console.log(`✓ Seeded ${doctors.length} doctors`);
-      console.log('  Test login (example): dr.bharat@kanthealth.com / doctor123');
+      console.log('Test login examples:');
+      console.log('dr.bharat@kanthealth.com / doctor123');
+      console.log('dr.chandrakant@kanthealth.com / doctor123');
+      console.log('dr.ulhas@kanthealth.com / doctor123');
     }
+
   } catch (err) {
     console.warn('⚠ Seeding failed:', err.message);
   }
@@ -89,18 +126,21 @@ async function start() {
     await prisma.$executeRaw`SELECT 1`;
     dbConnected = true;
     console.log('✓ Connected to PostgreSQL');
+
     await seedDoctors();
   } catch (err) {
     console.error('⚠ Unable to connect to PostgreSQL:', err.message);
     console.error('⚠ The backend will still start, but API endpoints requiring the database will fail until a valid DATABASE_URL is configured.');
   } finally {
     app.locals.dbConnected = dbConnected;
+
     app.listen(PORT, () => {
       console.log(`✓ Backend running on http://localhost:${PORT}`);
       if (!dbConnected) {
         console.log('⚠ WARNING: Database connection not available. Configure DATABASE_URL and restart to enable database-backed features.');
       }
     });
+
   }
 }
 
@@ -110,4 +150,3 @@ process.on('SIGINT', async () => {
 });
 
 start();
-

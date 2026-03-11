@@ -49,7 +49,7 @@ const DocumentUpload = () => {
     other: 150,
   };
 
-  const currentFee = (FEES[documentType as keyof typeof FEES] || 0);
+  const currentFee = 5000;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFiles = Array.from(e.target.files || []);

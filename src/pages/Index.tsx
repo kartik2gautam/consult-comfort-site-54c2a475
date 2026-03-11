@@ -73,7 +73,7 @@ const Index = () => {
              Easy online booking, secure payment and quality healthcare from the comfort of your home.
             </p>
             <div className="flex flex-wrap gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-              <Link to="/book">
+              <Link to="/book-now">
                 <Button variant="hero" size="xl">
                   Book Now
                   <ArrowRight className="w-5 h-5" />
